@@ -1,0 +1,15 @@
+<%- include("./partials/header.ejs") %>
+
+<div class="flex flex-col gap-2 w-max m-auto h-[70%] justify-center">
+    <h1 class="text-black font-semibold text-3xl">Create Account</h1>
+    <form class="flex flex-col gap-2" action="" method="post">
+        <input class="block bg-transparent text-zinc-500 px-4 py-1 outline-blue-500 border border-zinc-200 rounded-md" type="text" name="name" id="name" placeholder="Name">
+        <input class="block bg-transparent text-zinc-500 px-4 py-1 outline-blue-500 border border-zinc-200 rounded-md" type="text" name="username" id="username" placeholder="Username">
+        <input class="block bg-transparent text-zinc-500 px-4 py-1 outline-blue-500 border border-zinc-200 rounded-md" type="email" name="email" id="email" placeholder="Email">
+        <input class="block bg-transparent text-zinc-500 px-4 py-1 outline-blue-500 border border-zinc-200 rounded-md" type="password" name="password" id="password" placeholder="Password">
+        <button class="bg-blue-500 w-max px-5 py-1 text-white rounded-md" type="submit">Submit Details</button>
+    </form>
+    <a class="text-blue-600" href="/index"></a>
+</div>
+
+<%- include("./partials/footer.ejs") %>

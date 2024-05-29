@@ -1,13 +1,31 @@
 const mongoose = require("mongoose");
 
-mongoose.connect("mongodb://127.0.0.1:27017/khatabook");
-
 const userSchema = mongoose.Schema({
-    username: String,
-    name: String,
-    email: String,
-    password: String,
-    profilePicture: String,
+    username: {
+        type: String,
+        trim: true,
+        minLength: 3,
+        maxLength: 20,
+        required: true
+    },
+    name: {
+        type: String,
+        trim: true,
+        required: true
+    },
+    email: {
+        type: String,
+        trim: true,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
+    },
+    profilePicture: {
+        type: String,
+        trim: true
+    },
     hisab: {
         type: Array
     }

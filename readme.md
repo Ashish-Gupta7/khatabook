@@ -106,3 +106,11 @@ Aap environment variables ko apne operating system ke level pe bhi set kar sakte
 
 `Agar aap chahte hai ki DEBUG varibale ki value "development:" se start hone wale sabhi values ho to aap "development:mongoose" me mongoose ki jagah pr "*" laga skte hai.`
 
+## day 4 ( create user, login user... )
+1. create post method for /register route.
+2. create user
+3. incrypt password (bcrypt)
+4. set token (jwt)
+5. create post method for /login route.
+6. create isLoggedIn function.
+7. logout route

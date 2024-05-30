@@ -207,3 +207,8 @@ const User = mongoose.model('User', userSchema);
   ```
   let user = await userModel.findOne({email}).select('+password');
   ```
+
+## day 7
+1. create login-middleware.js file in middleware folder and move here isLoggedIn middleware and exports.
+2. in hisab-router and index router require isLoggedIn middleware.
+3. create new hisab(method post).

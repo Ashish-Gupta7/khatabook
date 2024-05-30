@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 
 const userModel = require("../models/user-model");
+const isLoggedIn = require("../middlewares/login-middleware");
 
 router.use(cookieParser());
 
@@ -45,14 +46,10 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
     try {
         let {email, password} = req.body;
-        let user = await userModel.findOne({email});
-        // let user = await userModel.findOne({email}).select('+password');
+        let user = await userModel.findOne({email}).select('+password');
         if(!user) return res.status(401).send("Email or password did not match");
 
         if(process.env.JWT_SECRET) {
-            console.log('Password from request:', password); // Logging the plain password
-            console.log('Hashed password from database:', user.password); // Logging the hashed password
-
             bcrypt.compare(password, user.password, (err, result) => {
                 if(err) return res.status(500).send(err.message);
 
@@ -72,24 +69,6 @@ router.post("/login", async (req, res) => {
         res.send(err.message);
     }
 });
-
-const isLoggedIn = (req, res ,next) => {
-    if(req.cookies.token) {
-        if(process.env.JWT_SECRET) {
-            jwt.verify(req.cookies.token, process.env.JWT_SECRET, (err, decoded) => {
-                if(err) {
-                    res.status(401).send(err.message);
-                } 
-                req.user = decoded;
-                next();
-            });
-        } else {
-            res.send("set your env variables");
-        }
-    } else {
-        res.status(401).send("You need to be logged in to access this page");
-    }
-}
 
 router.get("/", (req, res) => {
     res.render("index");

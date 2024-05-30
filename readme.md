@@ -106,6 +106,8 @@ Aap environment variables ko apne operating system ke level pe bhi set kar sakte
 
 `Agar aap chahte hai ki DEBUG varibale ki value "development:" se start hone wale sabhi values ho to aap "development:mongoose" me mongoose ki jagah pr "*" laga skte hai.`
 
+` jab aap command line pe environment variables set karte hain to woh session-specific hote hain, yaani jab aap terminal ya VS Code close kar dete hain to woh environment variables delete ho jate hain. Agar aap chahte hain ki environment variables persist (permanent) rahen har session ke liye, to aapko kuch additional steps lene padenge.`
+
 ## day 4 ( create user, login user... )
 1. create post method for /register route.
 2. create user
@@ -114,3 +116,15 @@ Aap environment variables ko apne operating system ke level pe bhi set kar sakte
 5. create post method for /login route.
 6. create isLoggedIn function.
 7. logout route
+
+## day 5
+1. create profile page
+2. when you trying to login, if you loggedIn successfully then redirect the profile page
+3. create profile route using get method
+4. in userSchema(go to user-model.js file) in password field add
+   ```
+   select: false
+   ```
+   jab bhi hum user ko login karege to humara password field show nhi hoga.
+5. create hisab-model and hisab-router
+6. require hisab-router in app.js

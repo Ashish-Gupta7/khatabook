@@ -2,8 +2,12 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
 
 const userModel = require("../models/user-model");
+const { render } = require("ejs");
+
+router.use(cookieParser());
 
 router.post("/register", async (req, res) => {
     try {
@@ -49,7 +53,7 @@ router.post("/login", async (req, res) => {
                     let token = jwt.sign({email, id: user._id}, process.env.JWT_SECRET);
 
                     res.cookie("token", token);
-                    res.send("logged in successfully");
+                    res.redirect("/profile");
                 } else{
                     res.send(err.message);
                 }
@@ -82,13 +86,20 @@ router.get("/", (req, res) => {
     res.render("index");
 });
 
-router.get("/register", isLoggedIn, (req, res) => {
+router.get("/register" , (req, res) => {
     res.render("register");
 });
 
-router.get("/logout", (req, res) => {
+router.get("/logout", isLoggedIn, (req, res) => {
     res.cookie("token", "");
     res.render("index");
+});
+
+router.get("/profile", isLoggedIn, async (req, res) => {
+    console.log(req.user);
+    let user = await userModel.findOne({email: req.user.email});
+    
+    res.render("profile", {user});
 });
 
 module.exports = router;

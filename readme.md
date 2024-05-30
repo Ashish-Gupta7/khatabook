@@ -107,6 +107,11 @@ Aap environment variables ko apne operating system ke level pe bhi set kar sakte
 `Agar aap chahte hai ki DEBUG varibale ki value "development:" se start hone wale sabhi values ho to aap "development:mongoose" me mongoose ki jagah pr "*" laga skte hai.`
 
 ` jab aap command line pe environment variables set karte hain to woh session-specific hote hain, yaani jab aap terminal ya VS Code close kar dete hain to woh environment variables delete ho jate hain. Agar aap chahte hain ki environment variables persist (permanent) rahen har session ke liye, to aapko kuch additional steps lene padenge.`
+- .env File ka Use:
+  Yeh sabse simple aur recommended method hai. .env file me environment variables define kar ke aur dotenv package ka use karke aap har baar jab apni application run karenge to yeh variables load ho jayenge. ise hum aage padhege.
+
+- VS Code Integrated Terminal me Persist karna:
+  VS Code me aap workspace settings ya terminal profile settings me bhi environment variables set kar sakte hain. pr ye recommended method nhi hai. isliye hum sirf aage .env se hi permanent env variable ko set karege.
 
 ## day 4 ( create user, login user... )
 1. create post method for /register route.

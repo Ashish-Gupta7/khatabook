@@ -14,7 +14,8 @@ const hisabSchema = mongoose.Schema({
         trim: true
     },
     user: {
-        type: String
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
     },
     encrypted: {
         type: Boolean,

@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 
 const userModel = require("../models/user-model");
-const { render } = require("ejs");
 
 router.use(cookieParser());
 
@@ -19,6 +18,8 @@ router.post("/register", async (req, res) => {
         if (process.env.JWT_SECRET) {
             bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash(password, salt, async (err, hash) => {
+                    console.log(hash);
+                    console.log(password);
                     let createdUser = await userModel.create({
                         username, name, email,
                         password: hash
@@ -45,21 +46,27 @@ router.post("/login", async (req, res) => {
     try {
         let {email, password} = req.body;
         let user = await userModel.findOne({email});
-        if(!user) return res.status(401).send("email or password did not match");
+        // let user = await userModel.findOne({email}).select('+password');
+        if(!user) return res.status(401).send("Email or password did not match");
 
         if(process.env.JWT_SECRET) {
+            console.log('Password from request:', password); // Logging the plain password
+            console.log('Hashed password from database:', user.password); // Logging the hashed password
+
             bcrypt.compare(password, user.password, (err, result) => {
+                if(err) return res.status(500).send(err.message);
+
                 if(result) {
                     let token = jwt.sign({email, id: user._id}, process.env.JWT_SECRET);
 
                     res.cookie("token", token);
                     res.redirect("/profile");
                 } else{
-                    res.send(err.message);
+                    res.status(401).send("Email or password did not match");
                 }
             });
         } else {
-            res.send("you dnt have env variables setup");
+            res.status(500).send("you dnt have env variables setup");
         }
     } catch(err) {
         res.send(err.message);
@@ -71,7 +78,7 @@ const isLoggedIn = (req, res ,next) => {
         if(process.env.JWT_SECRET) {
             jwt.verify(req.cookies.token, process.env.JWT_SECRET, (err, decoded) => {
                 if(err) {
-                    res.send(err.message);
+                    res.status(401).send(err.message);
                 } 
                 req.user = decoded;
                 next();
@@ -79,6 +86,8 @@ const isLoggedIn = (req, res ,next) => {
         } else {
             res.send("set your env variables");
         }
+    } else {
+        res.status(401).send("You need to be logged in to access this page");
     }
 }
 

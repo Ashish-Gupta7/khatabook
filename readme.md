@@ -133,3 +133,77 @@ Aap environment variables ko apne operating system ke level pe bhi set kar sakte
    jab bhi hum user ko login karege to humara password field show nhi hoga.
 5. create hisab-model and hisab-router
 6. require hisab-router in app.js
+
+## day 6
+### Relationships -> embedding & referencing
+1. Mongoose ek ODM (Object Data Modeling) library hai jo hume JavaScript objects ko MongoDB documents me map karne ki suvidha deti hai.
+
+2. for example -> 100 user hai aur inn 100 users ke 1000 posts hai ab hume nhi pta hai ki konsa post kis user ka hai ya kis user ne konsa post likha hai, mtlb ye kah skte hai ki user aur post ko ek dusre ke baare me pta nhi hai. lekin user ko pta hona chahiye ki usne kitne aur konse post lekhe hai to iske liye hi relationships ko concept kaam aata hai.
+
+3. Relationships manage karne ke do tareeke hain: Embedding aur Referencing. Dono ka apna-apna use case hota hai.
+
+#### Embedding(Denormalization)
+`for example humare paas ek user model hai jisme ek posts field hai aur usi field me har ek post ka data rakha gya hai aur koi alag se file/model banane ki jarurat nhi padti hai embedding ke case me.`
+
+`hum ek hi model me user se related information aur post se related information ke liye alag alag schema banate hai aur phir post schema ko user schema me embed kr dete hai.`
+
+```
+const mongoose = require('mongoose');
+
+// Post schema
+const postSchema = new mongoose.Schema({
+  title: String,
+  body: String,
+  date: { type: Date, default: Date.now }
+});
+
+// User schema
+const userSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  posts: [postSchema] // Embedding posts within user document
+});
+
+const User = mongoose.model('User', userSchema);
+```
+
+- Advantages of This Approach:
+  1. Simpler Model: Aapko sirf ek user model maintain karna hota hai jisme posts embedded hain.
+  2. Faster Reads: Ek hi document me sab data hone se reads faster hoti hain.
+  3. Simpler Queries: Related data ko retrieve karna simple hota hai.
+
+- Disadvantages of This Approach:
+  1. Document Size Limit: Agar ek user ke posts bohot zyada ho gaye to MongoDB document size limit (16MB) cross kar sakti hai.
+  2. Update Complexity: Agar posts frequently update hote hain to updating nested arrays thoda complex ho sakta hai.
+  3. Data Redundancy: Same data multiple documents me store hone se storage inefficient ho sakti hai.
+
+`Embedding ka use tabhi karein jab aapko related data ko frequently ek saath access karna ho aur aapka data ka size manageable ho. Ye approach simpler aur faster queries provide karta hai, lekin aapko document size aur update complexities ko dhyan me rakhna padta hai.`
+
+#### Referencing (Normalization)
+`for example humare paas ek user model hai jisme ek posts field hai, yaha hum post field ke liye ek alag se post schema banayege aur wahi hum posts ko likhege.`
+
+`ab kis user ne konsa post likha hai ya konsa post kis user ka hai isske liye hum jab hum post ya user create krte hai to inke sath ek _id key banti hai aur isi ki madad se hum post ka reference user ke posts field me likhte hai aur isi tarah post ke ander ek user field hogi jisme hum user ki _id ko likhte hai, aur aisa krne se post kisne likha hai uss user ke baare me pta chalta hai aur user ko bhi pta hota hai ki usne konsa ya kitne posts likhe hai.`
+
+- Advantages of Referencing:
+1. Data Independence: Different collections me data store hone se aap inhe independently manage kar sakte hain.
+2. Avoid Document Size Limit: Large datasets ke liye document size limit ka issue nahi hota.
+3. Flexibility: Related data ko references ke through manage karna flexible hota hai.
+
+- Disadvantages of Referencing:
+1. Slower Reads: Multiple collections se data retrieve karne ke liye joins required hote hain, jo reads ko slow kar sakte hain.
+2. Complex Queries: Queries thodi complex ho sakti hain kyunki aapko populate aur joins use karne padte hain.
+3. Data Consistency: References maintain karna data consistency ensure karne ke liye zaruri hota hai.
+
+`Referencing ka use tab karein jab aapke data ka size large ho aur aapko related data ko independently manage karna ho. Ye approach flexibility aur scalability provide karta hai lekin reads thodi slow ho sakti hain aur queries complex ho sakti hain.`
+
+### problem when you trying to login -->
+- `question:` Jab bhi mai naya user create krne ke baad uss user ko login krne ki kosis krta hu to browser me "data and hash arguments required" msg milta hai, user login nhi ho pata hai, aur jab mai bcrypt ko compare krte samay hash ko check krta hu to jo hashed password database se aana chahiye wo nhi aata hai mtlb terminal me undefined print ho rha hai, aur yadi mai userSchema me password field se "select: false" ko remove kr du tb user login ho jata hai, to question ye hai ki "select: false" ko use krte hue user login kaise kare?
+
+- `answer:` login route me jab aap user find krte hai tb usi samay niche likhe code ko user ko find krne wali line ke last me likh de. 
+  ```
+  .select('+password');
+  ```
+  example
+  ```
+  let user = await userModel.findOne({email}).select('+password');
+  ```

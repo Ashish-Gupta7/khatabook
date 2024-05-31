@@ -135,7 +135,9 @@ Aap environment variables ko apne operating system ke level pe bhi set kar sakte
 6. require hisab-router in app.js
 
 ## day 6
-### Relationships -> embedding & referencing
+### Data Association
+`MongoDB me data association ka matlab hai alag-alag collections ke beech relationship establish karna. Iske do main methods hain: embedding aur referencing.`
+
 1. Mongoose ek ODM (Object Data Modeling) library hai jo hume JavaScript objects ko MongoDB documents me map karne ki suvidha deti hai.
 
 2. for example -> 100 user hai aur inn 100 users ke 1000 posts hai ab hume nhi pta hai ki konsa post kis user ka hai ya kis user ne konsa post likha hai, mtlb ye kah skte hai ki user aur post ko ek dusre ke baare me pta nhi hai. lekin user ko pta hona chahiye ki usne kitne aur konse post lekhe hai to iske liye hi relationships ko concept kaam aata hai.
@@ -212,3 +214,39 @@ const User = mongoose.model('User', userSchema);
 1. create login-middleware.js file in middleware folder and move here isLoggedIn middleware and exports.
 2. in hisab-router and index router require isLoggedIn middleware.
 3. create new hisab(method post).
+
+## day 8
+1. create new hisab aur hisab ko pata hona chahiye ki usey kis user ne banaya hai aur user ko bhi pata hona chahiye ki usne kya hisab banaya hai.
+2. hisab ko user ke baare me pata ho iske liye ->
+   ```
+   user: req.user.id
+   ```
+   jo ki hisab me likha gaya hai.
+3. ab user ne konsa hisab banaya hai wo user ko pata hona chahiye iske liye ->
+   ```
+    let user = await userModel.find({email: req.user.email});
+    user.hisab.push(hisab._id);
+    await user.save();
+   ```
+isme hum phle isLoggedIn ki madad se req.user.email se user ka data nikalte hai jise user variable me store kr lete hai.
+iske baad uss user ke hisab array me humne jo abhi naya hisab banaya hai usey uski id ko push kr dete hai, mtlb hisab data ka reference user ke paas bhej dete hai.
+aur kyuki mongoose by default se kabhi nhi sochta hai ki hum direct schema me kuchh push kr skte hai wo sochta hai ki hum humesha data update krne ke liye findOneAndUpdate ka hi use karege isliye hume alag se user.save() likhne ki jarurat padti hai.
+4. find loggedIn user
+```
+router.get("/profile", isLoggedIn, async (req, res) => {
+    console.log(req.user);
+    let user = await userModel
+        .findOne({ email: req.user.email })
+        .populate("hisab");
+
+    res.render("profile", { user });
+});
+```
+yaha .populate("hisab") ka mtlb hai ki jo bhi id hisab array ke ander likhi ho usey populate kr do mtlb uska data show kr do na ki id ko dikhao.
+5. add timestamps at hisab-model 
+   ```
+   const hisabSchema = mongoose.Schema({
+    // data
+   }, { timestamps: true });
+   ```
+aisa karne se hisab kab bana tha aur kab update hua tha ye dono pata chalege.

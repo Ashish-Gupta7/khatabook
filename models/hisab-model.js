@@ -33,6 +33,6 @@ const hisabSchema = mongoose.Schema({
         type: String,
         default: false
     }
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model("Hisab", hisabSchema);

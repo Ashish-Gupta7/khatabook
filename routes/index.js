@@ -38,34 +38,34 @@ router.post("/register", async (req, res) => {
         } else {
             res.send("you forgot the env variables");
         }
-    } catch(err) {
+    } catch (err) {
         res.send(err.message);
     }
 });
 
 router.post("/login", async (req, res) => {
     try {
-        let {email, password} = req.body;
-        let user = await userModel.findOne({email}).select('+password');
-        if(!user) return res.status(401).send("Email or password did not match");
+        let { email, password } = req.body;
+        let user = await userModel.findOne({ email }).select('+password');
+        if (!user) return res.status(401).send("Email or password did not match");
 
-        if(process.env.JWT_SECRET) {
+        if (process.env.JWT_SECRET) {
             bcrypt.compare(password, user.password, (err, result) => {
-                if(err) return res.status(500).send(err.message);
+                if (err) return res.status(500).send(err.message);
 
-                if(result) {
-                    let token = jwt.sign({email, id: user._id}, process.env.JWT_SECRET);
+                if (result) {
+                    let token = jwt.sign({ email, id: user._id }, process.env.JWT_SECRET);
 
                     res.cookie("token", token);
                     res.redirect("/profile");
-                } else{
+                } else {
                     res.status(401).send("Email or password did not match");
                 }
             });
         } else {
             res.status(500).send("you dnt have env variables setup");
         }
-    } catch(err) {
+    } catch (err) {
         res.send(err.message);
     }
 });
@@ -74,7 +74,7 @@ router.get("/", (req, res) => {
     res.render("index");
 });
 
-router.get("/register" , (req, res) => {
+router.get("/register", (req, res) => {
     res.render("register");
 });
 
@@ -84,10 +84,11 @@ router.get("/logout", isLoggedIn, (req, res) => {
 });
 
 router.get("/profile", isLoggedIn, async (req, res) => {
-    console.log(req.user);
-    let user = await userModel.findOne({email: req.user.email});
-    
-    res.render("profile", {user});
+    let user = await userModel
+        .findOne({ email: req.user.email })
+        .populate("hisab");
+
+    res.render("profile", { user });
 });
 
 module.exports = router;

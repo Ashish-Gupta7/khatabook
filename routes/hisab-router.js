@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const isLoggedIn = require("../middlewares/login-middleware");
+const { isLoggedIn } = require("../middlewares/login-middleware");
 
 const hisabModel = require("../models/hisab-model");
 const userModel = require("../models/user-model");

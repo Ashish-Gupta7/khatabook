@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 
 const userModel = require("../models/user-model");
-const isLoggedIn = require("../middlewares/login-middleware");
+const { isLoggedIn, redirectIfLogin } = require("../middlewares/login-middleware");
 
 router.use(cookieParser());
 
@@ -70,17 +70,17 @@ router.post("/login", async (req, res) => {
     }
 });
 
-router.get("/", (req, res) => {
-    res.render("index");
+router.get("/", redirectIfLogin, (req, res) => {
+    res.render("index", {linksNotAllowed: false});
 });
 
-router.get("/register", (req, res) => {
-    res.render("register");
+router.get("/register", redirectIfLogin, (req, res) => {
+    res.render("register", {linksNotAllowed: false});
 });
 
 router.get("/logout", isLoggedIn, (req, res) => {
     res.cookie("token", "");
-    res.render("index");
+    res.redirect("/");
 });
 
 router.get("/profile", isLoggedIn, async (req, res) => {

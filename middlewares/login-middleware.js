@@ -18,4 +18,11 @@ const isLoggedIn = (req, res ,next) => {
     }
 }
 
-module.exports = isLoggedIn;
+const redirectIfLogin = (req, res, next) => {
+    if(req.cookies.token) {
+        res.redirect("/profile");
+    } else next();
+}
+
+module.exports.isLoggedIn = isLoggedIn;
+module.exports.redirectIfLogin = redirectIfLogin;

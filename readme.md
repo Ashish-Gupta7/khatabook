@@ -250,3 +250,78 @@ yaha .populate("hisab") ka mtlb hai ki jo bhi id hisab array ke ander likhi ho u
    }, { timestamps: true });
    ```
 aisa karne se hisab kab bana tha aur kab update hua tha ye dono pata chalege.
+
+## day 9
+### dotenv
+`dotenv package ka use environment variables ko manage karne ke liye hota hai. Yeh environment variables ko .env file se load karta hai aur aapke Node.js application ke process environment me add karta hai.`
+
+1. installation
+   ```
+   npm install dotenv
+   ```
+2. Create a .env file
+   ```
+   PORT=3000
+   DATABASE_URL=mongodb://localhost:27017/mydatabase
+   SECRET_KEY=supersecretkey
+   ```
+3. Load the .env file in your application
+   ```
+   // Import dotenv package
+   require('dotenv').config();
+   ```
+4. Access environment variables in your application
+   ```
+   require('dotenv').config();
+
+   // Access environment variables
+   const PORT = process.env.PORT || 3000;
+   const dbURL = process.env.DATABASE_URL;
+   const secretKey = process.env.SECRET_KEY;
+   ```
+#### `Benefits:`
+- Security: Sensitive information (jaise API keys, database credentials) ko codebase me hardcode karne ki jagah .env file me store karte hain.
+- Configuration: Different environments (development, testing, production) ke liye alag-alag configuration rakhi ja sakti hai.
+- Maintainability: Code me configuration values hardcode na karne se code zyada maintainable aur portable hota hai.
+
+### create new middleware function in login-middleware.js redirectIfLogin
+`iska use ye hoga ki yadi user already login hai to uske browser pr token to save hoga hi to hum usi ki madad se usey direct hi profile page pr bhej dege.`
+1. create
+   ```
+   const redirectIfLogin = (req, res, next) => {
+    if(req.cookies.token) {
+        res.redirect("/profile");
+    } else next();
+   }
+   ```
+2. export
+   ```
+   module.exports.isLoggedIn = isLoggedIn;
+   module.exports.redirectIfLogin = redirectIfLogin;
+   ```
+3. import -> jise use krna hai usey import kare.
+   ```
+   const { isLoggedIn } = require("../middlewares/login-middleware");
+   ```
+4. use
+   ```
+   router.get("/", redirectIfLogin, (req, res) => {
+    res.render("index");
+   });
+   ```
+5. jo env set kiye hai unke naam/key ko .env.example me likh de.
+
+### add logout button in "./views/partials/header.ejs"
+
+### problem -> 
+`mujhe home, create new hisab aur logout ye sab jab mai login page register page me bhi dekh skta hu lekin mai aisa nhi chahta hu to iske liye mai register aur login page ko render krte samay unke sath "linksNotAllowed: false" bhi bhej dunga aur ejs me condition laga duga`
+```
+<% var linksNotAllowed = typeof linksNotAllowed !== 'undefined' ? linksNotAllowed : true %>
+<% if(linksNotAllowed) { %>
+    <ul class="flex gap-6">
+        <li><a href="">Home</a></li>
+        <li><a href="">Create New Hisab</a></li>
+        <li><a class="text-red-600" href="/logout">Logout</a></li>
+    </ul>
+<% } %>
+```

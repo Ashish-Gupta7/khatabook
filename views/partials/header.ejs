@@ -10,8 +10,12 @@
 <body>
     <nav class="flex justify-between items-center px-12 py-6">
         <a href="">Khatabook</a>
-        <ul class="flex gap-6">
-            <li><a href="">Home</a></li>
-            <li><a href="">Create New Hisab</a></li>
-        </ul>
+        <% var linksNotAllowed = typeof linksNotAllowed !== 'undefined' ? linksNotAllowed : true %>
+        <% if(linksNotAllowed) { %>
+            <ul class="flex gap-6">
+                <li><a href="">Home</a></li>
+                <li><a href="">Create New Hisab</a></li>
+                <li><a class="text-red-600" href="/logout">Logout</a></li>
+            </ul>
+        <% } %>
     </nav>

@@ -325,3 +325,11 @@ aisa karne se hisab kab bana tha aur kab update hua tha ye dono pata chalege.
     </ul>
 <% } %>
 ```
+
+## day 10
+in place of res.send(errors) in simple formate, instead of this you can use connect-flash.
+   - to use connect-flash =>
+     > express-session in app.js
+     > connect-flash in app.js
+     > send error/warning... in ejs
+     > and redirect page

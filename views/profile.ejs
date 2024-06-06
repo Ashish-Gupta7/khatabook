@@ -1,5 +1,90 @@
 <%- include("./partials/header.ejs") %>
 
+<div class="px-12 py-6">
+    <!-- name -->
+    <div class="font-semibold">
+        <h1 class="text-3xl">Hey, <%= user.name %>👋</h1>
+        <h4 class="opacity-50 mt-2 text-sm">showing all hisabs, till now.</h4>
+    </div>
 
+    <!-- filter form -->
+    <form class="mt-10 flex gap-6" action="/profile" method="get">
+        <div class="flex gap-2 w-max px-4 py-2 rounded-md bg-zinc-300/40 text-zinc-600 font-semibold">
+            <h1>Filter</h1>
+            <i class="ri-sound-module-line"></i>
+        </div>
+        <div class="by_date flex gap-2 w-max px-4 py-2 rounded-md bg-zinc-300/40 text-zinc-600 font-semibold cursor-pointer">
+            <h1>By Date</h1>
+            <i class="ri-calendar-line"></i>
+        </div>
+        <div class="dates hidden gap-2 w-max font-semibold">
+            <div class="relative">
+                <label class="absolute -top-5 -left-2 text-[12px] px-2 py-1 text-black font-bold rounded-full" for="startDate">From</label>
+                <input class="bg-zinc-300/80 px-3 py-2 rounded-md text-black text-sm" name="startDate" id="startDate" type="date">
+            </div>
+            <div class="relative">
+                <label class="absolute -top-5 -left-2 text-[12px] px-2 py-1 text-black font-bold rounded-full" for="endDate">To</label>
+                <input class="bg-zinc-300/80 px-3 py-2 rounded-md text-black text-sm" name="endDate" id="endDate" type="date">
+            </div>
+        </div>
+        <select class="outline-none cursor-pointer" name="byDate" id="">
+            <option value="-1">Newest First</option>
+            <option value="1">Oldest First</option>
+        </select>
+        <input class="px-6 py-2 rounded-md bg-blue-500 text-white cursor-pointer" type="submit" value="Filter">
+    </form>
 
+    <!-- hisab info -->
+    <div class="mt-10 flex flex-row flex-wrap gap-4">
+
+        <% if(user) { %>
+            <% user.hisab.forEach(hisab => { %>
+                <div class="w-[30%] px-4 py-3 bg-zinc-300/30 rounded-md hover:bg-zinc-300/70">
+                    <!-- encrypt, available, eye-lock, date -->
+                    <div class="flex items-center justify-between text-sm gap-2">
+                        <div class="flex items-center text-sm gap-2">
+                            <% if(hisab.encrypted) { %>
+                                <div class="flex px-4 py-2 text-white rounded-md font-semibold items-center justify-center gap-1 bg-blue-500">
+                                    <i class="ri-lock-line"></i>
+                                    <h2>Encrypted</h2>
+                                </div>
+                            <% } else{ %>
+                                <div class="flex px-4 py-2 text-white rounded-md font-semibold items-center justify-center gap-1 bg-green-600">
+                                    <i class="ri-check-fill"></i>
+                                    <h2>Available</h2>
+                                </div>
+                            <% } %>
+                            <% if(!hisab.shareable) { %>
+                                <div class="py-1 px-3 rounded-md bg-zinc-300/80">
+                                    <i class="text-lg ri-eye-off-line"></i>
+                                </div>
+                            <% } %>
+                        </div>
+                        <h2 class="text-zinc-600/70 font-semibold">Created on <%= hisab.createdAt.getDate() %> - <%= hisab.createdAt.getMonth() %> - <%= hisab.createdAt.getFullYear() %></h2>
+                    </div>
+                    <!-- title -->
+                    <h1 class="title mt-3 font-semibold text-xl text-nowrap overflow-hidden overflow-ellipsis"><%= hisab.title %></h1>
+                    <!-- hisab -->
+                    <h1 class="mt-5 text-zinc-700/90 font-semibold">view hisab</h1>
+                </div>
+            <% }) %>
+        <% } %>
+    </div>
+</div>
+
+<script>
+    document.querySelector(".by_date").addEventListener("click", () => {
+        if(document.querySelector(".dates").classList.contains("hidden")) {
+            document.querySelector(".dates").classList.add("flex");
+            document.querySelector(".dates").classList.remove("hidden");
+        } else {
+            document.querySelector(".dates").classList.add("hidden");
+            document.querySelector(".dates").classList.remove("flex");
+        }
+    });
+
+    window.onload = () => {
+        document.querySelector("form").reset();
+    }
+</script>
 <%- include("./partials/footer.ejs") %>

@@ -33,6 +33,6 @@ const userSchema = mongoose.Schema({
             ref: "Hisab"
         }
     ]
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model("User", userSchema);

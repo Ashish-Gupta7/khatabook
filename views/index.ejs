@@ -2,6 +2,8 @@
 
 <div class="flex flex-col gap-2 w-max m-auto h-[65%] justify-center">
     <h1 class="text-black font-semibold text-3xl">Login</h1>
+
+    <!-- login form -->
     <form class="flex flex-col gap-2" action="/login" method="post">
         <input class="block bg-transparent outline-black text-zinc-500 px-4 py-1 border border-zinc-200 rounded-md" type="text" name="email" id="username" placeholder="email or username">
         <input class="block bg-transparent outline-black text-zinc-500 px-4 py-1 border border-zinc-200 rounded-md" type="text" name="password" id="password" placeholder="password">
@@ -10,4 +12,19 @@
     <a class="text-blue-600" href="/register">Dont't have an account ?</a>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
+integrity="sha512-7eHRwcbYkK4d9g/6tD/mhkf++eoTHwpNM9woBxtPUBWm67zeAfFC+HrdoE2GanKeocly/VxeLvIqwvCdk7qScg=="
+crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+    let successMsg = document.querySelector(".success_msg");
+    if (successMsg) {
+        setTimeout(() => {
+            gsap.to(successMsg, {
+                opacity: 0,
+            })
+        }, 1500);
+    }
+});
+</script>
 <%- include("./partials/footer.ejs") %>

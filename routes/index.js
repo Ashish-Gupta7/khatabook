@@ -72,7 +72,8 @@ router.post("/login", async (req, res) => {
 
 router.get("/", redirectIfLogin, (req, res) => {
     let err = req.flash("error");
-    res.render("index", { linksNotAllowed: false, err });
+    let warning = req.flash("warning");
+    res.render("index", { linksNotAllowed: false, err, warning });
 });
 
 router.get("/register", redirectIfLogin, (req, res) => {
@@ -86,10 +87,21 @@ router.get("/logout", isLoggedIn, (req, res) => {
 });
 
 router.get("/profile", isLoggedIn, async (req, res) => {
+    let byDate = Number(req.query.byDate);
+    let { startDate, endDate } = req.query;
     let success = req.flash("success");
+
+    byDate = byDate ? byDate : -1;
+    startDate = startDate ? startDate : new Date("1970-01-01");
+    endDate = endDate ? endDate : new Date();
+
     let user = await userModel
         .findOne({ email: req.user.email })
-        .populate("hisab");
+        .populate({
+            path: "hisab",
+            match: { createdAt: { $gte: startDate, $lte: endDate } },
+            options: { sort: { createdAt: byDate } }
+        });
 
     res.render("profile", { user, success });
 });

@@ -339,3 +339,8 @@ aisa karne se hisab kab bana tha aur kab update hua tha ye dono pata chalege.
 1. setup your ejs page.
 2. render all data of hisabs and users.
 3. set filter.
+
+## day 12
+1. create hisab.ejs
+2. handle submitted hisab form in hisab-router.js
+3. 

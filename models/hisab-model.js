@@ -30,7 +30,7 @@ const hisabSchema = mongoose.Schema({
         default: "",
     },
     editPermissions: {
-        type: String,
+        type: Boolean,
         default: false
     }
 }, { timestamps: true });

@@ -1,0 +1,54 @@
+<%- include("./partials/header.ejs") %>
+
+    <div class="px-12 py-6 flex flex-col">
+        <h1 class="text-2xl font-semibold">Create New Hisab</h1>
+
+        <!-- create hisab -->
+        <form action="/hisab/create" method="post" class="flex flex-col mt-4 gap-2 items-start">
+
+            <!-- title, description -->
+            <input class="block px-3 py-1 border border-zinc-600/10 bg-zinc-200/50 w-80 rounded-md" type="text"
+                name="title" placeholder="write here your hisab's title..." maxlength="40" required>
+            <textarea class="block px-3 py-1 border border-zinc-600/10 bg-zinc-200/50 w-1/2 rounded-md resize-none h-60"
+                name="description" placeholder="description..."></textarea>
+            
+            <!-- checkbox -->
+            <div class="flex flex-col gap-2 mt-6">
+                <div class="flex gap-12">
+                    <div class="flex gap-2">
+                        <input class="block cursor-pointer" type="checkbox" name="shareable" id="shareable">
+                        <label class="cursor-pointer block mb-[1.5px]" for="shareable">Shareable file ?</label>
+                    </div>
+                    <div class="flex gap-2">
+                        <input class="block cursor-pointer" type="checkbox" name="editPermissions" id="editPermissions">
+                        <label class="cursor-pointer block mb-[1.5px]" for="editPermissions">Edit permission</label>
+                    </div>
+                </div>
+                <div class="flex gap-2 items-center h-10">
+                    <input class="block cursor-pointer" type="checkbox" name="encrypted" id="encrypted">
+                    <label class="cursor-pointer block mb-[1.5px]" for="encrypted">Encrypt this file</label>
+                    <input class="hidden px-3 py-1 border border-zinc-600/10 bg-zinc-200/50 w-80 rounded-md ml-10"
+                        type="password" name="passcode" placeholder="Passcode" id="passcode">
+                </div>
+            </div>
+
+            <!-- submit -->
+            <input type="submit" value="Create New Hisab" class="px-4 py-2 font-semibold text-white bg-blue-500 rounded-md mt-4 cursor-pointer">
+        </form>
+    </div>
+
+    <script>
+        const encrypted = document.querySelector('#encrypted');
+        const passcode = document.querySelector('#passcode');
+        encrypted.addEventListener("click", (dets) => {
+            if(dets.target.checked === true) {
+                passcode.classList.remove("hidden");
+                passcode.setAttribute("required", "");
+            } else{
+                passcode.classList.add("hidden");
+                passcode.removeAttribute("required");
+            }
+        });
+    </script>
+
+    <%- include("./partials/footer.ejs") %>

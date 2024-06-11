@@ -9,8 +9,16 @@ router.get("/", (req, res) => {
     res.send("hisab page");
 });
 
+router.get("/create", isLoggedIn, (req, res) => {
+    res.render("hisab");
+});
+
 router.post("/create", isLoggedIn, async (req, res) => {
     let { title, description, encrypted, shareable, passcode, editPermissions } = req.body;
+    
+    encrypted = encrypted === "on" ? true : false;
+    shareable = shareable === "on" ? true : false;
+    editPermissions = editPermissions === "on" ? true : false;
 
     let hisab = await hisabModel.create({
         title: title,
@@ -26,7 +34,7 @@ router.post("/create", isLoggedIn, async (req, res) => {
     user.hisab.push(hisab._id);
     await user.save();
 
-    res.send(hisab)
+    res.send(hisab);
 });
 
 module.exports = router;

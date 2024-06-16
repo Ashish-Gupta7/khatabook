@@ -1,0 +1,43 @@
+<%- include("./partials/header.ejs") %>
+
+<div class="px-12 py-6">
+    <!-- encrypt/shareable/delete/edit -->
+    <div class="flex items-center gap-4">
+        <% if(hisab.encrypted) { %>
+            <div class="flex px-4 py-2 text-white rounded-md font-semibold items-center justify-center gap-1 bg-blue-500">
+                <i class="ri-lock-line"></i>
+                <h2>Encrypted</h2>
+            </div>
+        <% } else{ %>
+            <div class="flex px-4 py-2 text-white rounded-md font-semibold items-center justify-center gap-1 bg-green-600">
+                <i class="ri-check-fill"></i>
+                <h2>Available</h2>
+            </div>
+        <% } %>
+        <% if(hisab.shareable) { %>
+            <a href="" class="flex items-center gap-2">
+                <i class="ri-share-line mt-[1px]"></i>
+                <h2>share as a link</h2>
+            </a>
+        <% } else{ %>
+            <div class="py-[6px] px-3 rounded-md bg-zinc-300/80">
+                <i class="text-lg ri-eye-off-line"></i>
+            </div>
+        <% } %>
+        <a href="" class="px-4 py-2 text-white rounded-md font-semibold bg-red-600">Delete</a>
+        <% if(hisab.editPermissions) { %>
+            <a href="" class="px-4 py-2 text-white rounded-md font-semibold bg-yellow-500">Edit</a>
+        <% } %>
+    </div>
+
+    <!-- created on -->
+    <div class="mt-4 text-zinc-700/50 font-semibold">Created on <%= hisab.createdAt.getDate() %> - <%= hisab.createdAt.getMonth() %> - <%= hisab.createdAt.getFullYear() %></div>
+
+    <!-- hisab -->
+    <div class="mt-8">
+        <h2 class="text-2xl font-semibold"><%= hisab.title %></h2>
+        <h4 class="opacity-90 mt-1"><%= hisab.description %></h4>
+    </div>
+</div>
+
+<%- include("./partials/footer.ejs") %>

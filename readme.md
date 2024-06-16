@@ -343,4 +343,18 @@ aisa karne se hisab kab bana tha aur kab update hua tha ye dono pata chalege.
 ## day 12
 1. create hisab.ejs
 2. handle submitted hisab form in hisab-router.js
-3. 
+
+## day 13
+1. create viewHisab.ejs
+2. create passcode.ejs page for encryption
+   ```
+   if hisab is encrypted then, check passcode
+      input passcode 
+         if matched
+            create session for stop directly url access
+            show hisab page
+         if not matched
+            show flash msg for wrong passcode
+   if hisab is not encrypted, then
+      show hisab page
+   ```

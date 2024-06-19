@@ -4,6 +4,7 @@ const flash = require("connect-flash");
 const expressSession = require("express-session");
 
 require("dotenv").config();
+const dbgr = require("debug")("development:PORT");
 const path = require('path');
 const db = require("./config/mongoose-connection");
 
@@ -28,5 +29,5 @@ app.use("/hisab", hisabRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-    console.log(`Server listening at port ${PORT}`);
+    dbgr(`Server listening at port ${PORT}`);
 });

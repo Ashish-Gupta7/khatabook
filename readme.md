@@ -358,3 +358,10 @@ aisa karne se hisab kab bana tha aur kab update hua tha ye dono pata chalege.
    if hisab is not encrypted, then
       show hisab page
    ```
+
+## day 14
+1. delete the hisab.
+2. edit the hisab.
+3. protect route when another user trying to edit and delete the hisab using url.
+   - check, jis user ka hisab hai kya wahi uss hisab ko delete/edit kr rha hai.
+   - check, jis hisab ko edit aur delete kiya ja rha hai kya wah encrypted hai ya nhi yadi encrypted hai to user se pahle password mango, uske baad hi user uss hisab ko edit ya delete kr ske.
